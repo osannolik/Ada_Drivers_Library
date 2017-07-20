@@ -81,6 +81,12 @@ BOARDS = {
                                   '../stm32_common/otm8009a',
                                   '../stm32_common/sdcard',
                                   '../stm32_common/sdram']},
+    'STM32F446_MotorControl': {
+        'rts_board':             'stm32f446-motorcontrol',
+        'rts_profiles':          ['ravenscar-sfp'],
+        'target':                'arm-eabi',
+        'mcu':                   'arch/ARM/STM32/stm32f446x',
+        'source_dirs':           ['src']},
     }
 
 
@@ -93,7 +99,8 @@ FOLDERS = {'Crazyflie': 'crazyflie',
            'STM32F429_Discovery': 'stm32f429_discovery',
            'STM32F469_Discovery': 'stm32f469_discovery',
            'STM32F746_Discovery': 'stm32f746_discovery',
-           'STM32F769_Discovery': 'stm32f769_discovery'}
+           'STM32F769_Discovery': 'stm32f769_discovery',
+           'STM32F446_MotorControl': 'stm32f446_motorcontrol'}
 
 
 def gen_project(board_name, rts):
