@@ -444,6 +444,11 @@ package STM32.Device is
    procedure Enable_Clock (This : in out Timer);
    procedure Reset (This : in out Timer);
 
+   function Has_APB2_Frequency  (This : Timer) return Boolean;
+   --  timers 1, 8, 9, 10, 11
+
+   function Has_APB1_Frequency (This : Timer) return Boolean;
+   --  timers 3, 4, 6, 7, 12, 13, 14
 
    -----------
    -- Audio --

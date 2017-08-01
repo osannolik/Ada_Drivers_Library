@@ -579,6 +579,32 @@ package body STM32.Device is
       end if;
    end Reset;
 
+   ------------------------
+   -- Has_APB2_Frequency --
+   ------------------------
+
+   function Has_APB2_Frequency (This : Timer) return Boolean is
+     (This'Address = STM32_SVD.TIM1_Base or
+      This'Address = STM32_SVD.TIM8_Base or
+      This'Address = STM32_SVD.TIM9_Base or
+      This'Address = STM32_SVD.TIM10_Base or
+      This'Address = STM32_SVD.TIM11_Base);
+
+   ------------------------
+   -- Has_APB1_Frequency --
+   ------------------------
+
+   function Has_APB1_Frequency (This : Timer) return Boolean is
+     (This'Address = STM32_SVD.TIM2_Base or
+      This'Address = STM32_SVD.TIM3_Base or
+      This'Address = STM32_SVD.TIM4_Base or
+      This'Address = STM32_SVD.TIM5_Base or
+      This'Address = STM32_SVD.TIM6_Base or
+      This'Address = STM32_SVD.TIM7_Base or
+      This'Address = STM32_SVD.TIM12_Base or
+      This'Address = STM32_SVD.TIM13_Base or
+                      This'Address = STM32_SVD.TIM14_Base);
+
    ------------------
    -- Enable_Clock --
    ------------------
