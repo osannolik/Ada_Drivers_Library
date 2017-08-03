@@ -69,8 +69,9 @@ package STM32.PWM is
    subtype Hertz is UInt32;
 
    procedure Configure_PWM_Timer
-     (Generator : not null access Timer;
-      Frequency : Hertz)
+     (Generator    : not null access Timer;
+      Frequency    : Hertz;
+      Counter_Mode : Timer_Counter_Alignment_Mode := Up)
      with Post =>
        Enabled (Generator.all) and
        (if Advanced_Timer (Generator.all) then Main_Output_Enabled (Generator.all));
@@ -88,6 +89,20 @@ package STM32.PWM is
    --  An abstraction for PWM modulation using a timer operating at a given
    --  frequency. Essentially a convenience wrapper for the PWM functionality
    --  of the timers.
+
+   procedure Attach_PWM_Channel
+     (This      : in out PWM_Modulator;
+      Generator : not null access Timer;
+      Channel   : Timer_Channel;
+      Polarity  : Timer_Output_Compare_Polarity := High)
+     with Post => not Output_Enabled (This) and
+                  Current_Duty_Cycle (This) = 0;
+   --  Initializes the channel on the timer associated with This modulator
+   --  for PWM output.
+   --
+   --  May be called multiple times for the same PWM_Modulator object, with
+   --  different channels, because the corresponding timer can drive multiple
+   --  channels (assuming such a timer is in use).
 
    procedure Attach_PWM_Channel
      (This      : in out PWM_Modulator;
@@ -122,6 +137,24 @@ package STM32.PWM is
    --  Initializes the channel on the timer associated with This modulator, and
    --  the corresponding GPIO port/pin pairs, for PWM output with complementary
    --  output included.
+   --
+   --  May be called multiple times for the same PWM_Modulator object, with
+   --  different channels, because the corresponding timer can drive multiple
+   --  channels (assuming such a timer is in use).
+
+   procedure Attach_PWM_Channel
+     (This                     : in out PWM_Modulator;
+      Generator                : not null access Timer;
+      Channel                  : Timer_Channel;
+      Polarity                 : Timer_Output_Compare_Polarity;
+      Idle_State               : Timer_Capture_Compare_State;
+      Complementary_Polarity   : Timer_Output_Compare_Polarity;
+      Complementary_Idle_State : Timer_Capture_Compare_State)
+     with Post => not Output_Enabled (This) and
+                  not Complementary_Output_Enabled (This) and
+                  Current_Duty_Cycle (This) = 0;
+   --  Initializes the channel on the timer associated with This modulator,
+   --  for PWM output with complementary output included.
    --
    --  May be called multiple times for the same PWM_Modulator object, with
    --  different channels, because the corresponding timer can drive multiple

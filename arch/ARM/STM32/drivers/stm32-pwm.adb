@@ -130,8 +130,9 @@ package body STM32.PWM is
    -------------------------
 
    procedure Configure_PWM_Timer
-     (Generator : not null access Timer;
-      Frequency : Hertz)
+     (Generator    : not null access Timer;
+      Frequency    : Hertz;
+      Counter_Mode : Timer_Counter_Alignment_Mode := Up)
    is
       Computed_Prescalar : UInt32;
       Computed_Period    : UInt32;
@@ -144,14 +145,19 @@ package body STM32.PWM is
          Prescalar           => Computed_Prescalar,
          Period              => Computed_Period);
 
-      Computed_Period := Computed_Period - 1;
+      case Counter_Mode is
+         when Up | Down =>
+            Computed_Period := Computed_Period - 1;
+         when Center_Aligned1 | Center_Aligned2 | Center_Aligned3 =>
+            Computed_Period := Computed_Period / 2 - 1;
+      end case;
 
       Configure
         (Generator.all,
          Prescaler     => UInt16 (Computed_Prescalar),
          Period        => Computed_Period,
          Clock_Divisor => Div1,
-         Counter_Mode  => Up);
+         Counter_Mode  => Counter_Mode);
 
       Set_Autoreload_Preload (Generator.all, True);
 
@@ -161,6 +167,33 @@ package body STM32.PWM is
 
       Enable (Generator.all);
    end Configure_PWM_Timer;
+
+   ------------------------
+   -- Attach_PWM_Channel --
+   ------------------------
+
+   procedure Attach_PWM_Channel
+     (This      : in out PWM_Modulator;
+      Generator : not null access Timer;
+      Channel   : Timer_Channel;
+      Polarity  : Timer_Output_Compare_Polarity := High)
+   is
+   begin
+      This.Channel := Channel;
+      This.Generator := Generator;
+
+      Configure_Channel_Output
+        (This.Generator.all,
+         Channel  => Channel,
+         Mode     => PWM1,
+         State    => Disable,
+         Pulse    => 0,
+         Polarity => Polarity);
+
+      Set_Compare_Value (This.Generator.all, Channel, UInt16 (0));
+
+      Disable_Channel (This.Generator.all, Channel);
+   end Attach_PWM_Channel;
 
    ------------------------
    -- Attach_PWM_Channel --
@@ -220,6 +253,39 @@ package body STM32.PWM is
 
       Configure_PWM_GPIO (Point, PWM_AF);
       Configure_PWM_GPIO (Complementary_Point, PWM_AF);
+
+      Configure_Channel_Output
+        (This.Generator.all,
+         Channel                  => Channel,
+         Mode                     => PWM1,
+         State                    => Disable,
+         Pulse                    => 0,
+         Polarity                 => Polarity,
+         Idle_State               => Idle_State,
+         Complementary_Polarity   => Complementary_Polarity,
+         Complementary_Idle_State => Complementary_Idle_State);
+
+      Set_Compare_Value (This.Generator.all, Channel, UInt16 (0));
+
+      Disable_Channel (This.Generator.all, Channel);
+   end Attach_PWM_Channel;
+
+   ------------------------
+   -- Attach_PWM_Channel --
+   ------------------------
+
+   procedure Attach_PWM_Channel
+     (This                     : in out PWM_Modulator;
+      Generator                : not null access Timer;
+      Channel                  : Timer_Channel;
+      Polarity                 : Timer_Output_Compare_Polarity;
+      Idle_State               : Timer_Capture_Compare_State;
+      Complementary_Polarity   : Timer_Output_Compare_Polarity;
+      Complementary_Idle_State : Timer_Capture_Compare_State)
+   is
+   begin
+      This.Channel := Channel;
+      This.Generator := Generator;
 
       Configure_Channel_Output
         (This.Generator.all,
