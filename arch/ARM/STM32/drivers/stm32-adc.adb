@@ -56,9 +56,10 @@ package body STM32.ADC is
      with Inline;
 
    procedure Set_Injected_Channel_Sequence_Position
-     (This    : in out Analog_To_Digital_Converter;
-      Channel : Analog_Input_Channel;
-      Rank    : Injected_Channel_Rank)
+     (This            : in out Analog_To_Digital_Converter;
+      Channel         : Analog_Input_Channel;
+      Rank            : Injected_Channel_Rank;
+      Sequence_Length : Injected_Sequence_Length)
      with Inline;
 
    procedure Set_Injected_Channel_Offset
@@ -282,7 +283,8 @@ package body STM32.ADC is
                Conversion.Channel,
                Rank,
                Conversion.Sample_Time,
-               Conversion.Offset);
+               Conversion.Offset,
+               Conversions'Length);
 
             --  We check the VBat first because that channel is also used for
             --  the temperature sensor channel on some MCUs, in which case the
@@ -349,6 +351,18 @@ package body STM32.ADC is
      return Natural is
      (Natural (This.JSQR.JL) + 1);
 
+   -------------------
+   -- Set_Scan_Mode --
+   -------------------
+
+   procedure Set_Scan_Mode
+      (This    : in out Analog_To_Digital_Converter;
+       Enabled : Boolean)
+   is
+   begin
+      This.CR1.SCAN := Enabled;
+   end Set_Scan_Mode;
+
    -----------------------
    -- Scan_Mode_Enabled --
    -----------------------
@@ -385,15 +399,17 @@ package body STM32.ADC is
    --------------------------------
 
    procedure Configure_Injected_Channel
-     (This        : in out Analog_To_Digital_Converter;
-      Channel     : Analog_Input_Channel;
-      Rank        : Injected_Channel_Rank;
-      Sample_Time : Channel_Sampling_Times;
-      Offset      : Injected_Data_Offset)
+     (This            : in out Analog_To_Digital_Converter;
+      Channel         : Analog_Input_Channel;
+      Rank            : Injected_Channel_Rank;
+      Sample_Time     : Channel_Sampling_Times;
+      Offset          : Injected_Data_Offset;
+      Sequence_Length : Injected_Sequence_Length)
    is
    begin
       Set_Sampling_Time (This, Channel, Sample_Time);
-      Set_Injected_Channel_Sequence_Position (This, Channel, Rank);
+      Set_Injected_Channel_Sequence_Position
+         (This, Channel, Rank, Sequence_Length);
       Set_Injected_Channel_Offset (This, Rank, Offset);
    end Configure_Injected_Channel;
 
@@ -855,12 +871,14 @@ package body STM32.ADC is
    --------------------------------------------
 
    procedure Set_Injected_Channel_Sequence_Position
-     (This    : in out Analog_To_Digital_Converter;
-      Channel : Analog_Input_Channel;
-      Rank    : Injected_Channel_Rank)
+     (This            : in out Analog_To_Digital_Converter;
+      Channel         : Analog_Input_Channel;
+      Rank            : Injected_Channel_Rank;
+      Sequence_Length : Injected_Sequence_Length)
    is
    begin
-      This.JSQR.JSQ.Arr (Integer (Rank)) := Channel;
+      This.JSQR.JSQ.Arr
+         (Integer (Rank) + 4 - Integer (Sequence_Length)) := Channel;
    end Set_Injected_Channel_Sequence_Position;
 
    -----------------------

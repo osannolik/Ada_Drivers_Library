@@ -149,7 +149,12 @@ package STM32.ADC is
 
    type Regular_Channel_Rank is new Natural range 1 .. 16;
 
-   type Injected_Channel_Rank is new Natural range 1 .. 4;
+   Injected_Sequence_Length_Max : constant Positive := 4;
+
+   type Injected_Channel_Rank is
+      new Natural range 1 .. Injected_Sequence_Length_Max;
+
+   subtype Injected_Sequence_Length is Injected_Channel_Rank;
 
    type External_Events_Regular_Group is
      (Timer1_CC1_Event,
@@ -219,6 +224,11 @@ package STM32.ADC is
      return Natural;
    --  Returns the total number of regular channel conversions specified in the
    --  hardware
+
+   procedure Set_Scan_Mode
+      (This    : in out Analog_To_Digital_Converter;
+       Enabled : Boolean);
+   --  Allows the scan mode for a specified ADC unit to be enabled or disabled.
 
    function Scan_Mode_Enabled (This : Analog_To_Digital_Converter)
      return Boolean;
@@ -719,11 +729,12 @@ private
       Sample_Time : Channel_Sampling_Times);
 
    procedure Configure_Injected_Channel
-     (This        : in out Analog_To_Digital_Converter;
-      Channel     : Analog_Input_Channel;
-      Rank        : Injected_Channel_Rank;
-      Sample_Time : Channel_Sampling_Times;
-      Offset      : Injected_Data_Offset);
+     (This            : in out Analog_To_Digital_Converter;
+      Channel         : Analog_Input_Channel;
+      Rank            : Injected_Channel_Rank;
+      Sample_Time     : Channel_Sampling_Times;
+      Offset          : Injected_Data_Offset;
+      Sequence_Length : Injected_Sequence_Length);
 
    procedure Enable_VBat_Connection with
      Post => VBat_Enabled;
