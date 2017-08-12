@@ -8,11 +8,9 @@ with "../../components/components";
 with "../../middleware/middleware";
 with "../../middleware/ravenscar_support";
 
-library project STM32F446_MotorControl is
+library project STM32F446_MotorControl_Full is
 
-   type RTS_Profile_Type is ("ravenscar-sfp", "ravenscar-full");
-   RTS_Profile : RTS_Profile_Type :=
-     external ("RTS_Profile", "ravenscar-sfp");
+   RTS_Profile := "ravenscar-full";
 
    for Target use "arm-eabi";
    for Runtime ("Ada") use RTS_Profile & "-stm32f446-motorcontrol";
@@ -34,4 +32,4 @@ library project STM32F446_MotorControl is
 
    package Compiler renames Config.Compiler;
 
-end STM32F446_MotorControl;
+end STM32F446_MotorControl_Full;
