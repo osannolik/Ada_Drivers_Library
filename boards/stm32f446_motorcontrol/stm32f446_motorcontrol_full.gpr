@@ -13,7 +13,7 @@ library project STM32F446_MotorControl_Full is
    RTS_Profile := "ravenscar-full";
 
    for Target use "arm-eabi";
-   for Runtime ("Ada") use RTS_Profile & "-stm32f446-motorcontrol";
+   for Runtime ("Ada") use RTS_Profile & "-motorcontrol";
 
    Obj_Suffix := Project'Runtime ("Ada");
 

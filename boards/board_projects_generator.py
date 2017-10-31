@@ -82,7 +82,7 @@ BOARDS = {
                                   '../stm32_common/sdcard',
                                   '../stm32_common/sdram']},
     'STM32F446_MotorControl': {
-        'rts_board':             'stm32f446-motorcontrol',
+        'rts_board':             'motorcontrol',
         'rts_profiles':          ['ravenscar-sfp', 'ravenscar-full'],
         'target':                'arm-eabi',
         'mcu':                   'arch/ARM/STM32/stm32f446x',
