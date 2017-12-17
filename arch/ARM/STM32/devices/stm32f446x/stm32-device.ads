@@ -405,9 +405,9 @@ package STM32.Device is
    Internal_I2S_2 : aliased Internal_I2S_Port with Import, Volatile, Address => SPI2_Base;
    Internal_I2S_3 : aliased Internal_I2S_Port with Import, Volatile, Address => SPI3_Base;
 
-   I2S_1 : aliased I2S_Port (Internal_I2S_1'Access);
-   I2S_2 : aliased I2S_Port (Internal_I2S_2'Access);
-   I2S_3 : aliased I2S_Port (Internal_I2S_3'Access);
+   I2S_1 : aliased I2S_Port (Internal_I2S_1'Access, Extended => False);
+   I2S_2 : aliased I2S_Port (Internal_I2S_2'Access, Extended => False);
+   I2S_3 : aliased I2S_Port (Internal_I2S_3'Access, Extended => False);
 
    procedure Enable_Clock (This : I2S_Port);
    procedure Reset (This : in out I2S_Port);
