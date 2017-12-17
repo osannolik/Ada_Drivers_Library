@@ -246,7 +246,7 @@ package body Some_Tasks is
    begin
 
       STM32.PWM.Configure_PWM_Timer (Generator => Hall_Timer'Access,
-                                     Frequency => 283);
+                                     Frequency => 277);
 
       Trigger.Attach_PWM_Channel (Generator => Hall_Timer'Access,
                                   Channel   => STM32.Timers.Channel_1,

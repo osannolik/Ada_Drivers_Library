@@ -12,19 +12,19 @@ package Some_Tasks is
 
    task Hall_Handler with
       Priority => System.Priority'Last,
-      Storage_Size => (4 * 1024);
+      Storage_Size => (1 * 1024);
 
    task Current_Control with
       Priority => System.Priority'Last - 1,
-      Storage_Size => (8 * 1024);
+      Storage_Size => (1 * 1024);
 
    task Inverter_System with
       Priority => System.Priority'Last - 2,
-      Storage_Size => (10 * 1024);
+      Storage_Size => (1 * 1024);
 
    task Logger with
       Priority => System.Priority'Last - 4,
-      Storage_Size => (8 * 1024);
+      Storage_Size => (1 * 1024);
 
 
    type Sample_Array is array (1 .. 2) of Float;
