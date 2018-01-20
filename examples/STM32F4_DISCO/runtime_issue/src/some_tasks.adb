@@ -125,11 +125,15 @@ package body Some_Tasks is
          if Status (ADC_Timer, Timer_CC1_Indicated) and then
             Interrupt_Enabled (ADC_Timer, Timer_CC1_Interrupt)
          then
-            Clear_Pending_Interrupt (ADC_Timer, Timer_CC1_Interrupt);
-
             Samples := (10.0, 100.0);
             New_Samples := True;
          end if;
+
+         Clear_Pending_Interrupt (ADC_Timer, Timer_CC1_Interrupt);
+
+--           for Flag in STM32.Timers.Timer_Interrupt'Range loop
+--              Clear_Pending_Interrupt (ADC_Timer, Flag);
+--           end loop;
 
       end ISR;
 
@@ -158,10 +162,18 @@ package body Some_Tasks is
          if Status (Hall_Timer, Timer_CC1_Indicated) and then
             Interrupt_Enabled (Hall_Timer, Timer_CC1_Interrupt)
          then
-            Clear_Pending_Interrupt (Hall_Timer, Timer_CC1_Interrupt);
-
             Hall_State_Is_Updated := True;
          end if;
+
+         Clear_Pending_Interrupt (Hall_Timer, Timer_CC1_Interrupt);
+
+--           for Flag in STM32.Timers.Timer_Interrupt'Range loop
+--              if Flag /= Timer_COM_Interrupt and then
+--                 Flag /= Timer_Break_Interrupt
+--              then
+--                 Clear_Pending_Interrupt (Hall_Timer, Flag);
+--              end if;
+--           end loop;
 
       end ISR;
 

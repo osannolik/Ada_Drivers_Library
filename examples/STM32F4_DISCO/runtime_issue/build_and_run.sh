@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gprbuild runtime_issue.gpr
+gprbuild runtime_issue.gpr $1
 
 st-util &
 
