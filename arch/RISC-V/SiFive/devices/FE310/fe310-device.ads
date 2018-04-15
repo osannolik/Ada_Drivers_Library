@@ -31,6 +31,7 @@
 
 with FE310.GPIO; use FE310.GPIO;
 with FE310.UART; use FE310.UART;
+with FE310.PWM;  use FE310.PWM;
 
 with FE310_SVD;
 
@@ -82,5 +83,13 @@ package FE310.Device is
 
    UART0 : aliased UART_Port (Internal_UART0'Access);
    UART1 : aliased UART_Port (Internal_UART1'Access);
+
+   Internal_PWM0 : aliased Internal_PWM with Import, Volatile, Address => FE310_SVD.PWM0_Base;
+   Internal_PWM1 : aliased Internal_PWM with Import, Volatile, Address => FE310_SVD.PWM1_Base;
+   Internal_PWM2 : aliased Internal_PWM with Import, Volatile, Address => FE310_SVD.PWM2_Base;
+
+   PWM0 : aliased  PWM_Device (Internal_PWM0'Access);
+   PWM1 : aliased  PWM_Device (Internal_PWM1'Access);
+   PWM2 : aliased  PWM_Device (Internal_PWM2'Access);
 
 end FE310.Device;
