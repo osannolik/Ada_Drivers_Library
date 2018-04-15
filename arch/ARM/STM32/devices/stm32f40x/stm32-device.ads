@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------------
 --                                                                          --
---                     Copyright (C) 2015-2017, AdaCore                     --
+--                     Copyright (C) 2015-2018, AdaCore                     --
 --                                                                          --
 --  Redistribution and use in source and binary forms, with or without      --
 --  modification, are permitted provided that the following conditions are  --
@@ -60,6 +60,7 @@ with STM32.I2C.DMA;        use STM32.I2C.DMA;
 with STM32.RTC;            use STM32.RTC;
 with STM32.CRC;            use STM32.CRC;
 with STM32.SDMMC;          use STM32.SDMMC;
+with STM32.CAN;            use STM32.CAN;
 
 with Ada.Interrupts.Names;
 
@@ -330,6 +331,12 @@ package STM32.Device is
    procedure Enable_Clock (This : aliased in out USART);
 
    procedure Reset (This : aliased in out USART);
+
+   CAN_1 : aliased CAN_Controller with Volatile, Import, Address => CAN1_Base;
+   CAN_2 : aliased CAN_Controller with Volatile, Import, Address => CAN2_Base;
+
+   procedure Enable_Clock (This : aliased in out CAN_Controller);
+   procedure Reset (This : aliased in out CAN_Controller);
 
    DMA_1 : aliased DMA_Controller with Import, Volatile, Address => DMA1_Base;
    DMA_2 : aliased DMA_Controller with Import, Volatile, Address => DMA2_Base;
