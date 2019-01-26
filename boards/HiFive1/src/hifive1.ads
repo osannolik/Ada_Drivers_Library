@@ -54,4 +54,5 @@ package HiFive1 is
    HF1_Pin_17 : GPIO_Point renames P11; --                    | IOF 1 : PWM 2
    HF1_Pin_18 : GPIO_Point renames P12; --                    | IOF 1 : PWM 2
    HF1_Pin_19 : GPIO_Point renames P13; --                    | IOF 1 : PWM 2
+
 end HiFive1;

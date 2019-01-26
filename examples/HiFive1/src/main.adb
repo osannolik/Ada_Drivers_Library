@@ -1,6 +1,9 @@
 ------------------------------------------------------------------------------
 --                                                                          --
---                       Copyright (C) 2017, AdaCore                        --
+--          Copyright (C) 2017-2018, AdaCore and other contributors         --
+--                                                                          --
+--      See github.com/AdaCore/Ada_Drivers_Library/graphs/contributors      --
+--                           for more information                           --
 --                                                                          --
 --  Redistribution and use in source and binary forms, with or without      --
 --  modification, are permitted provided that the following conditions are  --
@@ -29,37 +32,40 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
+with FE310;
 with HiFive1.LEDs; use HiFive1.LEDs;
+with FE310.Time; use FE310.Time;
 
 procedure Main is
-   procedure Busy_Loop;
-
-   ---------------
-   -- Busy_Loop --
-   ---------------
-
-   procedure Busy_Loop is
-   begin
-      for Cnt in 1 .. 500_000 loop
-         null;
-      end loop;
-   end Busy_Loop;
 
 begin
+   --  The SPI flash clock divider should be as small as possible to increase
+   --  the execution speed of instructions that are not yet in the instruction
+   --  cache.
+   FE310.Set_SPI_Flash_Clock_Divider (2);
+
+   --  Load the internal oscillator factory calibration to be sure it
+   --  oscillates at a known frequency.
+   FE310.Load_Internal_Oscilator_Calibration;
+
+   --  Use the HiFive1 16 MHz crystal oscillator which is more acurate than the
+   --  internal oscillator.
+   FE310.Use_Crystal_Oscillator;
+
    HiFive1.LEDs.Initialize;
 
    --  Blinky!
    loop
       Turn_On (Red_LED);
-      Busy_Loop;
+      Delay_S (1);
       Turn_Off (Red_LED);
 
       Turn_On (Green_LED);
-      Busy_Loop;
+      Delay_S (1);
       Turn_Off (Green_LED);
 
       Turn_On (Blue_LED);
-      Busy_Loop;
+      Delay_S (1);
       Turn_Off (Blue_LED);
    end loop;
 end Main;
