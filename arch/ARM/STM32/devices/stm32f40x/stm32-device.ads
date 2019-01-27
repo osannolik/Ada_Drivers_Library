@@ -59,6 +59,7 @@ with STM32.I2C.DMA;  use STM32.I2C.DMA;
 with STM32.RTC;      use STM32.RTC;
 with STM32.CRC;      use STM32.CRC;
 with STM32.SDMMC;    use STM32.SDMMC;
+with STM32.CAN;      use STM32.CAN;
 
 package STM32.Device is
    pragma Elaborate_Body;
